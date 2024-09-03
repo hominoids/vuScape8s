@@ -31,7 +31,7 @@ use <./SBC_Model_Framework/sbc_models.scad>;
 use <./lib/sbc_case_builder_library.scad>;
 
 /* [View] */
-view = "model";  // [model, platter, part]
+view = "part";  // [model, platter, part]
 individual_part = "back"; // [front, back, frame, sbc_cover, ups_cover, ups_button, bracket_left, bracket_right]
 vu8s_on = true;
 move_front = 0; // [-1:200]
@@ -42,6 +42,7 @@ ups_on = true;
 move_ups_cover = 0; // [-1:200]
 
 /* [Adjustments] */
+sbc_model = "m1s"; // ["m1s","m2"]
 orientation = "landscape"; // [landscape, portrait]
 view_angle = 15; // [10:1:23]
 view_height = 24; // [10:.5:40]
@@ -63,7 +64,6 @@ prototype_m1s_on = false;
 prototype_ups_on = false;
 
 /* [Hidden] */
-sbc_model = "m1s";
 flip_view = false;
 wallthick = 2;
 floorthick = 1.5;
@@ -594,7 +594,7 @@ echo("SBC Cover", width,depth,height);
             translate([102,7.5,-adj]) color(b_color) cylinder(d=3.2, h=4);
             translate([102,65.5,-adj]) color(b_color) cylinder(d=3.2, h=4);
             // sbc openings
-            translate([93.5,67.75,floorthick+.5]) color(b_color) rotate([0,0,180]) sbc("m1s",true);
+            translate([93.5,67.75,floorthick+.5]) color(b_color) rotate([0,0,180]) sbc(sbc_model, enableheatsink = "none", fansize = 0, enablegpio =  "default", enableuart =  "default", enablemask = true);
             if(gpio_opening ==  true) {
                 if(gpio_ext_opening == true) {
                     translate([7,-1,-adj]) color(b_color) cube([82,12,16]);
