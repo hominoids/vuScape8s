@@ -15,7 +15,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
     Code released under GPLv3: http://www.gnu.org/licenses/gpl.html
 
-    20231204 Version 1.0.0    vuScape8m Vu8s, Odroid-M1s and M1s-UPS integrated Case initial release.
+    20231204 Version 1.0    vuScape8s, Odroid-M1s and M1s-UPS integrated Case initial release.
+    2024090x Version 2.0    Added Odroid-M2
     
     case_front()
     case_back()
@@ -27,18 +28,18 @@
 */
 
 use <./lib/fillets.scad>;
+use <./lib/vuScape8s_library.scad>;
 use <./SBC_Model_Framework/sbc_models.scad>;
-use <./lib/sbc_case_builder_library.scad>;
 
 /* [View] */
-view = "part";  // [model, platter, part]
+view = "model";  // [model, platter, part]
 individual_part = "back"; // [front, back, frame, sbc_cover, ups_cover, ups_button, bracket_left, bracket_right]
 vu8s_on = true;
 move_front = 0; // [-1:200]
 move_back = 0; // [-1:200]
 sbc_on = true;
 move_sbc_cover = 0; // [-1:200]
-ups_on = true;
+ups_on = false;
 move_ups_cover = 0; // [-1:200]
 
 /* [Adjustments] */
@@ -59,7 +60,7 @@ gpio_opening = false;
 gpio_ext_opening = true;
 
 ups_led_down_light =  true;
-ups_location = "side"; // [none, bottom, side]
+ups_location = "none"; // [none, bottom, side]
 prototype_m1s_on = false;
 prototype_ups_on = false;
 
