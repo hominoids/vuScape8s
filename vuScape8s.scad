@@ -110,8 +110,8 @@ bottom_standoff=[ 5.2,     // radius
                   
 adj = .1;
 $fn = 90;
+cover_offset = sbc_model == "m2" ? 25 : 0;
 
-echo(width=width, depth=depth, height=front_height);
 
 // platter view
 if (view == "platter") {
@@ -126,7 +126,7 @@ if (view == "platter") {
     
 // model view
 if (view == "model" && orientation == "landscape") {
-    translate([(width/2),-40,view_height-2+(view_angle-15)]) rotate([90+view_angle,0,180]) {  // landscape
+//    translate([(width/2),-40,view_height-2+(view_angle-15)]) rotate([90+view_angle,0,180]) {  // landscape
         if(move_front >= 0) {
             color("grey",1) translate([0,0,-move_front]) case_front();
         }
@@ -140,7 +140,7 @@ if (view == "model" && orientation == "landscape") {
          translate([162,115.5,6+front_height]) rotate([0,0,180]) sbc(sbc_model);
         }
         if(move_sbc_cover >= 0 && prototype_m1s_on == false) {
-         translate([gap+wallthick+66,gap+wallthick+44.5,front_height+4+move_sbc_cover]) rotate([0,0,0]) sbc_cover();
+         translate([gap+wallthick+66,gap+wallthick+44.5-cover_offset,front_height+4+move_sbc_cover]) rotate([0,0,0]) sbc_cover();
         }
         if(ups_on == true) {
             if(ups_location == "side") {
@@ -188,7 +188,7 @@ if (view == "model" && orientation == "landscape") {
          translate([width+gap+wallthick-7.75,11.5,front_height]) rotate([0,0,90]) bracket("left");
          translate([width-2.5,depth-.5,front_height]) rotate([0,0,90]) bracket("right");
         }
-    }
+//    }
 }
 if (view == "model" && orientation == "portrait") {
     translate([-(depth/2),-40,view_height-2+(view_angle-15)]) rotate([0,270-view_angle,270]) {  // portrait
@@ -396,74 +396,110 @@ module back_frame() {
             translate([width-gap-wallthick+4-pillar_x/2,gap+wallthick+13.75,p_thick/2]) color(b_color)
                 cube_fillet_inside([pillar_x-8,p_width,p_thick], 
                     vertical=[c_fillet,c_fillet,c_fillet,c_fillet], top=[0,0,0,0], bottom=[0,0,0,0], $fn=90);
-            // lower middle bar
-            translate([width-gap-wallthick-10-pillar_x/2,gap+wallthick+52,p_thick/2]) color(b_color)
-                cube_fillet_inside([pillar_x-40,p_width,p_thick], 
-                    vertical=[c_fillet,c_fillet,c_fillet,c_fillet], top=[0,0,0,0], bottom=[0,0,0,0], $fn=90);
             // upper bar
             translate([5+width-gap-wallthick-pillar_x/2,gap+wallthick+138,p_thick/2]) color(b_color)
                 cube_fillet_inside([pillar_x-10,p_width,p_thick], 
                     vertical=[c_fillet,c_fillet,c_fillet,c_fillet], top=[0,0,0,0], bottom=[0,0,0,0], $fn=90);
-            // upper middle bar
-            translate([width-gap-wallthick-10-(pillar_x/2),gap+wallthick+109,p_thick/2]) color(b_color) 
-                cube_fillet_inside([pillar_x-41,p_width,p_thick], 
-                    vertical=[c_fillet,c_fillet,c_fillet,c_fillet], top=[0,0,0,0], bottom=[0,0,0,0], $fn=90);
-            // left sbc bar bar
+            // left sbc bar
             translate([71-gap-wallthick-p_width/2,10+gap+wallthick+pillar_y/2,p_thick/2]) color(b_color) 
                 cube_fillet_inside([p_width,pillar_y,p_thick], 
                     vertical=[c_fillet,c_fillet,c_fillet,c_fillet], top=[0,0,0,0], bottom=[0,0,0,0], $fn=90);
-            // right sbc bar bar
+            // right sbc bar
             translate([width-30-gap-wallthick-p_width/2,10+gap+wallthick+pillar_y/2,p_thick/2]) color(b_color) 
                 cube_fillet_inside([p_width,pillar_y,p_thick], 
                     vertical=[c_fillet,c_fillet,c_fillet,c_fillet], top=[0,0,0,0], bottom=[0,0,0,0], $fn=90);
-            // bottom sbc stub
-            translate([146.25-gap-wallthick-p_width/2,38+gap+wallthick+pillar_y/2,p_thick/2]) color(b_color) 
-                cube_fillet_inside([p_width,10,p_thick], 
-                    vertical=[c_fillet,c_fillet,c_fillet,c_fillet], top=[0,0,0,0], bottom=[0,0,0,0], $fn=90);
-            translate([96-gap-wallthick-p_width/2,38.5+gap+wallthick+pillar_y/2,p_thick/2]) color(b_color) 
-                cube_fillet_inside([p_width,16,p_thick], 
-                    vertical=[c_fillet,c_fillet,c_fillet,c_fillet], top=[0,0,0,0], bottom=[0,0,0,0], $fn=90);
-            // ups left stubs
-            translate([46.5-gap-wallthick-p_width/2,65.5+gap+wallthick+pillar_y/2,p_thick/2]) color(b_color) 
-                cube_fillet_inside([47,p_width,p_thick], 
-                    vertical=[0,c_fillet,c_fillet,0], top=[0,0,0,0], bottom=[0,0,0,0], $fn=90);
-            translate([46.5-gap-wallthick-p_width/2,-42+gap+wallthick+pillar_y/2,p_thick/2]) color(b_color) 
-                cube_fillet_inside([47,p_width,p_thick], 
-                    vertical=[0,c_fillet,c_fillet,0], top=[0,0,0,0], bottom=[0,0,0,0], $fn=90);
-            // ups cover stubs left mount
-            translate([39.5-gap-wallthick-p_width/2,72.75+gap+wallthick+pillar_y/2,p_thick/2]) color(b_color) 
-                cube_fillet_inside([p_width,12,p_thick], 
-                    vertical=[c_fillet,c_fillet,0,0], top=[0,0,0,0], bottom=[0,0,0,0], $fn=90);
-            translate([39.5-gap-wallthick-p_width/2,-49.25+gap+wallthick+pillar_y/2,p_thick/2]) color(b_color) 
-                cube_fillet_inside([p_width,12,p_thick], 
-                    vertical=[0,0,c_fillet,c_fillet], top=[0,0,0,0], bottom=[0,0,0,0], $fn=90);
-            // ups cover stubs bottom mount
-            translate([62.5-gap-wallthick-p_width/2,-39.75+gap+wallthick+pillar_y/2,p_thick/2]) color(b_color) 
-                cube_fillet_inside([12,p_width,p_thick], 
-                    vertical=[0,c_fillet,c_fillet,0], top=[0,0,0,0], bottom=[0,0,0,0], $fn=90);
-            translate([186.5-gap-wallthick-p_width/2,-39.75+gap+wallthick+pillar_y/2,p_thick/2]) color(b_color) 
-                cube_fillet_inside([12,p_width,p_thick], 
-                    vertical=[c_fillet,0,0,c_fillet], top=[0,0,0,0], bottom=[0,0,0,0], $fn=90);
-            // sbc standoff
-            translate([75.5,54,back_height+1.5])  color(b_color) cylinder(d=7, h=3);
-            translate([88.75,102.5,back_height+1.5])  color(b_color) cylinder(d=7, h=3);
-            translate([139,105.5,back_height+1.5])  color(b_color) cylinder(d=7, h=3);
-            translate([158.5,54.25,back_height+1.5])  color(b_color) cylinder(d=7, h=3);
+            if(sbc_model == "m1s") {
+               // lower middle bar
+                translate([width-gap-wallthick-10-pillar_x/2,gap+wallthick+52,p_thick/2]) color(b_color)
+                    cube_fillet_inside([pillar_x-40,p_width,p_thick], 
+                        vertical=[c_fillet,c_fillet,c_fillet,c_fillet], top=[0,0,0,0], bottom=[0,0,0,0], $fn=90);
+                // upper middle bar
+                translate([width-gap-wallthick-10-(pillar_x/2),gap+wallthick+109,p_thick/2]) color(b_color) 
+                    cube_fillet_inside([pillar_x-41,p_width,p_thick], 
+                        vertical=[c_fillet,c_fillet,c_fillet,c_fillet], top=[0,0,0,0], bottom=[0,0,0,0], $fn=90);
+                // bottom sbc stub
+                translate([146.25-gap-wallthick-p_width/2,38+gap+wallthick+pillar_y/2,p_thick/2]) color(b_color) 
+                    cube_fillet_inside([p_width,10,p_thick], 
+                        vertical=[c_fillet,c_fillet,c_fillet,c_fillet], top=[0,0,0,0], bottom=[0,0,0,0], $fn=90);
+                translate([96-gap-wallthick-p_width/2,38.5+gap+wallthick+pillar_y/2,p_thick/2]) color(b_color) 
+                    cube_fillet_inside([p_width,16,p_thick], 
+                        vertical=[c_fillet,c_fillet,c_fillet,c_fillet], top=[0,0,0,0], bottom=[0,0,0,0], $fn=90);
+                // ups left stubs
+                translate([46.5-gap-wallthick-p_width/2,65.5+gap+wallthick+pillar_y/2,p_thick/2]) color(b_color) 
+                    cube_fillet_inside([47,p_width,p_thick], 
+                        vertical=[0,c_fillet,c_fillet,0], top=[0,0,0,0], bottom=[0,0,0,0], $fn=90);
+                translate([46.5-gap-wallthick-p_width/2,-42+gap+wallthick+pillar_y/2,p_thick/2]) color(b_color) 
+                    cube_fillet_inside([47,p_width,p_thick], 
+                        vertical=[0,c_fillet,c_fillet,0], top=[0,0,0,0], bottom=[0,0,0,0], $fn=90);
+                // ups cover stubs left mount
+                translate([39.5-gap-wallthick-p_width/2,72.75+gap+wallthick+pillar_y/2,p_thick/2]) color(b_color) 
+                    cube_fillet_inside([p_width,12,p_thick], 
+                        vertical=[c_fillet,c_fillet,0,0], top=[0,0,0,0], bottom=[0,0,0,0], $fn=90);
+                translate([39.5-gap-wallthick-p_width/2,-49.25+gap+wallthick+pillar_y/2,p_thick/2]) color(b_color) 
+                    cube_fillet_inside([p_width,12,p_thick], 
+                        vertical=[0,0,c_fillet,c_fillet], top=[0,0,0,0], bottom=[0,0,0,0], $fn=90);
+                // ups cover stubs bottom mount
+                translate([62.5-gap-wallthick-p_width/2,-39.75+gap+wallthick+pillar_y/2,p_thick/2]) color(b_color) 
+                    cube_fillet_inside([12,p_width,p_thick], 
+                        vertical=[0,c_fillet,c_fillet,0], top=[0,0,0,0], bottom=[0,0,0,0], $fn=90);
+                translate([186.5-gap-wallthick-p_width/2,-39.75+gap+wallthick+pillar_y/2,p_thick/2]) color(b_color) 
+                    cube_fillet_inside([12,p_width,p_thick], 
+                        vertical=[c_fillet,0,0,c_fillet], top=[0,0,0,0], bottom=[0,0,0,0], $fn=90);
+                // sbc standoff
+                translate([139,105.5,back_height+1.5])  color(b_color) cylinder(d=7, h=3);
+                translate([158.5,54.25,back_height+1.5])  color(b_color) cylinder(d=7, h=3);
+                translate([75.5,54,back_height+1.5])  color(b_color) cylinder(d=7, h=3);
+                translate([88.75,102.5,back_height+1.5])  color(b_color) cylinder(d=7, h=3);
+            }
+            if(sbc_model == "m2") {
+                // upper middle bar
+                translate([width-gap-wallthick-49.5-(pillar_x/2),gap+wallthick+109,p_thick/2]) color(b_color) 
+                    cube_fillet_inside([30,p_width,p_thick], 
+                        vertical=[c_fillet,c_fillet,c_fillet,c_fillet], top=[0,0,0,0], bottom=[0,0,0,0], $fn=90);
+                translate([width-gap-wallthick+37-(pillar_x/2),gap+wallthick+104,p_thick/2]) color(b_color) 
+                    cube_fillet_inside([20,p_width,p_thick], 
+                        vertical=[c_fillet,c_fillet,c_fillet,c_fillet], top=[0,0,0,0], bottom=[0,0,0,0], $fn=90);
+                // top sbc stub
+                translate([165.75-gap-wallthick-p_width/2,36+gap+wallthick+pillar_y/2,p_thick/2]) color(b_color) 
+                    cube_fillet_inside([p_width,14,p_thick], 
+                        vertical=[c_fillet,c_fillet,c_fillet,c_fillet], top=[0,0,0,0], bottom=[0,0,0,0], $fn=90);
+                translate([96-gap-wallthick-p_width/2,38.5+gap+wallthick+pillar_y/2,p_thick/2]) color(b_color) 
+                    cube_fillet_inside([p_width,13,p_thick], 
+                        vertical=[c_fillet,c_fillet,c_fillet,c_fillet], top=[0,0,0,0], bottom=[0,0,0,0], $fn=90);
+                // bottom sbc stub
+                translate([165.75-gap-wallthick-p_width/2,-43+gap+wallthick+pillar_y/2,p_thick/2]) color(b_color) 
+                    cube_fillet_inside([p_width,16,p_thick], 
+                        vertical=[c_fillet,c_fillet,c_fillet,c_fillet], top=[0,0,0,0], bottom=[0,0,0,0], $fn=90);
+                translate([83-gap-wallthick-p_width/2,-43+gap+wallthick+pillar_y/2,p_thick/2]) color(b_color) 
+                    cube_fillet_inside([p_width,16,p_thick], 
+                        vertical=[c_fillet,c_fillet,c_fillet,c_fillet], top=[0,0,0,0], bottom=[0,0,0,0], $fn=90);
+                // sbc standoff
+                translate([158.5,101,back_height+1.5])  color(b_color) cylinder(d=7, h=3);
+                translate([158.5,29,back_height+1.5])  color(b_color) cylinder(d=7, h=3);
+                translate([75.5,29,back_height+1.5])  color(b_color) cylinder(d=7, h=3);
+                translate([88.575,104,back_height+1.5])  color(b_color) cylinder(d=7, h=3);
+            }
         }
         
         // bar trim
         translate([width-gap-wallthick-10+adj,gap+wallthick+8.75,-adj]) color(b_color) cube([10,10,2]);
         translate([width-gap-wallthick-10+adj,gap+wallthick+132.75,-adj]) color(b_color) cube([10,10,2]);
         translate([gap+wallthick+55+adj,gap+wallthick+75,9]) rotate([270,0,0]) color(b_color) cylinder(d=16, h=26);
-        translate([gap+wallthick+101+adj,gap+wallthick+57,-adj]) rotate([0,0,0]) color(b_color) slot(12,43,4+(2*adj));
+        if(sbc_model == "m1s") {
+            translate([gap+wallthick+101+adj,gap+wallthick+57,-adj]) rotate([0,0,0]) color(b_color) slot(12,43,4+(2*adj));
+            translate([gap+wallthick+67+adj,gap+wallthick+90.5,-adj]) rotate([0,0,90]) color(b_color) slot(10,7,6);
+            translate([gap+wallthick+26.5+adj,gap+wallthick+27.5,-adj]) rotate([0,0,0]) color(b_color) slot(10,6.5,6);
+            translate([gap+wallthick+26.5+adj,gap+wallthick+125.5,-adj]) rotate([0,0,0]) color(b_color) slot(10,6.5,6);
+            translate([gap+wallthick+163+adj,gap+wallthick+23,-adj]) rotate([0,0,90]) color(b_color) slot(10,6.5,6);
+            translate([gap+wallthick+147+adj,gap+wallthick+112.5,-adj]) rotate([0,0,0]) color(b_color) slot(10,11.5,6);
+            translate([gap+wallthick+70+adj,gap+wallthick+106,-adj]) rotate([0,0,0]) color(b_color) slot(10,6.5,6);
+            translate([gap+wallthick+66+adj,gap+wallthick+23,-adj]) rotate([0,0,90]) color(b_color) slot(10,6.5,6);
+        }
         translate([gap+wallthick+100+adj,gap+wallthick+104,-adj]) rotate([0,0,0]) color(b_color) slot(12,22,4+(2*adj));
-        translate([gap+wallthick+70+adj,gap+wallthick+106,-adj]) rotate([0,0,0]) color(b_color) slot(10,6.5,6);
-        translate([gap+wallthick+67+adj,gap+wallthick+90.5,-adj]) rotate([0,0,90]) color(b_color) slot(10,7,6);
-        translate([gap+wallthick+147+adj,gap+wallthick+112.5,-adj]) rotate([0,0,0]) color(b_color) slot(10,11.5,6);
-        translate([gap+wallthick+26.5+adj,gap+wallthick+27.5,-adj]) rotate([0,0,0]) color(b_color) slot(10,6.5,6);
-        translate([gap+wallthick+26.5+adj,gap+wallthick+125.5,-adj]) rotate([0,0,0]) color(b_color) slot(10,6.5,6);
-        translate([gap+wallthick+163+adj,gap+wallthick+23,-adj]) rotate([0,0,90]) color(b_color) slot(10,6.5,6);
-        translate([gap+wallthick+66+adj,gap+wallthick+23,-adj]) rotate([0,0,90]) color(b_color) slot(10,6.5,6);
+        if(sbc_model == "m2") {
+            translate([gap+wallthick+163+adj,gap+wallthick+33.5,-adj]) rotate([0,0,90]) color(b_color) slot(10,6.5,6);
+//            #translate([gap+wallthick+143+adj,gap+wallthick+112.5,-adj]) rotate([0,0,0]) color(b_color) slot(10,11.5,6);
+        }
         
         // lower bar holes
         translate([width-gap-wallthick-4,gap+wallthick+13.75,-6]) color(b_color) cylinder(d=3, h=13);
@@ -482,37 +518,44 @@ module back_frame() {
         translate([64,112.5,back_height-2*floorthick-adj]) color(b_color) cylinder(d=insert_dia, h=6);
         translate([171,54.5,back_height-2*floorthick-adj]) color(b_color) cylinder(d=insert_dia, h=6);
         translate([171,112.5,back_height-2*floorthick-adj]) color(b_color) cylinder(d=insert_dia, h=6);
-        
-        // ups inserts bottom mount
-        translate([63.5,16,back_height-2*floorthick-adj]) color(b_color) cylinder(d=insert_dia, h=6);
-        translate([63.5,41,back_height-2*floorthick-adj]) color(b_color) cylinder(d=insert_dia, h=6);
-        translate([171.5,16,back_height-2*floorthick-adj]) color(b_color) cylinder(d=insert_dia, h=6);
-        translate([171.5,41,back_height-2*floorthick-adj]) color(b_color) cylinder(d=insert_dia, h=6);
-        
-        // ups inserts left mount
-        translate([gap+wallthick+42,gap+wallthick+130.75,-6]) color(b_color) cylinder(d=insert_dia, h=13);
-        translate([gap+wallthick+17,gap+wallthick+130.75,-6]) color(b_color) cylinder(d=insert_dia, h=13);
-        translate([gap+wallthick+17,gap+wallthick+22.75,-6]) color(b_color) cylinder(d=insert_dia, h=13);
-        translate([gap+wallthick+42,gap+wallthick+22.75,-6]) color(b_color) cylinder(d=insert_dia, h=13);
-
-        // ups cover inserts left mount
-        translate([39.5-gap-wallthick-p_width/2,75+gap+wallthick+pillar_y/2,-6]) color(b_color) 
-            cylinder(d=insert_dia, h=13);
-        translate([39.5-gap-wallthick-p_width/2,-51.75+gap+wallthick+pillar_y/2,-6]) color(b_color) 
-            cylinder(d=insert_dia, h=13);
+        if(sbc_model == "m1s") {
+            // ups inserts bottom mount
+            translate([63.5,16,back_height-2*floorthick-adj]) color(b_color) cylinder(d=insert_dia, h=6);
+            translate([63.5,41,back_height-2*floorthick-adj]) color(b_color) cylinder(d=insert_dia, h=6);
+            translate([171.5,16,back_height-2*floorthick-adj]) color(b_color) cylinder(d=insert_dia, h=6);
+            translate([171.5,41,back_height-2*floorthick-adj]) color(b_color) cylinder(d=insert_dia, h=6);
             
-        // ups cover inserts bottom mount
-        translate([61.5-gap-wallthick-p_width/2,-39.75+gap+wallthick+pillar_y/2,-6]) color(b_color) 
-            cylinder(d=insert_dia, h=13);
-        translate([188.25-gap-wallthick-p_width/2,-39.75+gap+wallthick+pillar_y/2,-6]) color(b_color) 
-            cylinder(d=insert_dia, h=13);
-        
+            // ups inserts left mount
+            translate([gap+wallthick+42,gap+wallthick+130.75,-6]) color(b_color) cylinder(d=insert_dia, h=13);
+            translate([gap+wallthick+17,gap+wallthick+130.75,-6]) color(b_color) cylinder(d=insert_dia, h=13);
+            translate([gap+wallthick+17,gap+wallthick+22.75,-6]) color(b_color) cylinder(d=insert_dia, h=13);
+            translate([gap+wallthick+42,gap+wallthick+22.75,-6]) color(b_color) cylinder(d=insert_dia, h=13);
+
+            // ups cover inserts left mount
+            translate([39.5-gap-wallthick-p_width/2,75+gap+wallthick+pillar_y/2,-6]) color(b_color) 
+                cylinder(d=insert_dia, h=13);
+            translate([39.5-gap-wallthick-p_width/2,-51.75+gap+wallthick+pillar_y/2,-6]) color(b_color) 
+                cylinder(d=insert_dia, h=13);
+                
+            // ups cover inserts bottom mount
+            translate([61.5-gap-wallthick-p_width/2,-39.75+gap+wallthick+pillar_y/2,-6]) color(b_color) 
+                cylinder(d=insert_dia, h=13);
+            translate([188.25-gap-wallthick-p_width/2,-39.75+gap+wallthick+pillar_y/2,-6]) color(b_color) 
+                cylinder(d=insert_dia, h=13);
+        }
         // bare sbc mount inserts
-        translate([75.5,54,back_height-2*floorthick-adj]) color(b_color) cylinder(d=insert_dia, h=9);
-        translate([88.75,102.5,back_height-2*floorthick-adj]) color(b_color) cylinder(d=insert_dia, h=9);
-        translate([139,105.5,back_height-2*floorthick-adj]) color(b_color) cylinder(d=insert_dia, h=9);
-        translate([158.5,54.25,back_height-2*floorthick-adj]) color(b_color) cylinder(d=insert_dia, h=9);
-        
+        if(sbc_model == "m1s") {
+            translate([75.5,54,back_height-2*floorthick-adj]) color(b_color) cylinder(d=insert_dia, h=9);
+            translate([88.75,102.5,back_height-2*floorthick-adj]) color(b_color) cylinder(d=insert_dia, h=9);
+            translate([139,105.5,back_height-2*floorthick-adj]) color(b_color) cylinder(d=insert_dia, h=9);
+            translate([158.5,54.25,back_height-2*floorthick-adj]) color(b_color) cylinder(d=insert_dia, h=9);
+        }
+        if(sbc_model == "m2") {
+            translate([158.5,101,back_height-2*floorthick-adj]) color(b_color) cylinder(d=insert_dia, h=9);
+            translate([158.5,29,back_height-2*floorthick-adj]) color(b_color) cylinder(d=insert_dia, h=9);
+            translate([75.5,29,back_height-2*floorthick-adj]) color(b_color) cylinder(d=insert_dia, h=9);
+            translate([88.575,104,back_height-2*floorthick-adj]) color(b_color) cylinder(d=insert_dia, h=9);
+        }
     }
     if(view == "model") {
         // hk case inserts
@@ -520,46 +563,53 @@ module back_frame() {
         translate([64,112.5,back_height-1.4]) m_insert();
         translate([171,54.5,back_height-1.4]) m_insert();
         translate([171,112.5,back_height-1.4]) m_insert();
-        
-        // ups inserts bottom mount
-        translate([63.5,16,back_height-1.4]) m_insert();
-        translate([63.5,41,back_height-1.4]) m_insert();
-        translate([171.5,16,back_height-1.4]) m_insert();
-        translate([171.5,41,back_height-1.4]) m_insert();
-        
-        // ups inserts left mount
-        translate([gap+wallthick+42,gap+wallthick+130.75,back_height-1.4]) m_insert();
-        translate([gap+wallthick+17,gap+wallthick+130.75,back_height-1.4]) m_insert();
-        translate([gap+wallthick+17,gap+wallthick+22.75,back_height-1.4]) m_insert();
-        translate([gap+wallthick+42,gap+wallthick+22.75,back_height-1.4]) m_insert();
+        if(sbc_model == "m1s") {
+            // ups inserts bottom mount
+            translate([63.5,16,back_height-1.4]) m_insert();
+            translate([63.5,41,back_height-1.4]) m_insert();
+            translate([171.5,16,back_height-1.4]) m_insert();
+            translate([171.5,41,back_height-1.4]) m_insert();
+            
+            // ups inserts left mount
+            translate([gap+wallthick+42,gap+wallthick+130.75,back_height-1.4]) m_insert();
+            translate([gap+wallthick+17,gap+wallthick+130.75,back_height-1.4]) m_insert();
+            translate([gap+wallthick+17,gap+wallthick+22.75,back_height-1.4]) m_insert();
+            translate([gap+wallthick+42,gap+wallthick+22.75,back_height-1.4]) m_insert();
 
-        // ups cover inserts left mount
-        translate([35.25-gap-wallthick,13.25+gap+wallthick,back_height-1.4]) m_insert();
-        translate([35.25-gap-wallthick,140+gap+wallthick,back_height-1.4]) m_insert();
-        // ups cover inserts bottom mount
-        translate([57.25-gap-wallthick,25.25+gap+wallthick,back_height-1.4]) m_insert();
-        translate([184-gap-wallthick,25.25+gap+wallthick,back_height-1.4]) m_insert();
-        
+            // ups cover inserts left mount
+            translate([35.25-gap-wallthick,13.25+gap+wallthick,back_height-1.4]) m_insert();
+            translate([35.25-gap-wallthick,140+gap+wallthick,back_height-1.4]) m_insert();
+            // ups cover inserts bottom mount
+            translate([57.25-gap-wallthick,25.25+gap+wallthick,back_height-1.4]) m_insert();
+            translate([184-gap-wallthick,25.25+gap+wallthick,back_height-1.4]) m_insert();
+        }
         // bare sbc mount inserts
-        translate([75.5,54,back_height+.6]) m_insert();
-        translate([88.75,102.5,back_height+.6]) m_insert();
-        translate([139,105.5,back_height+.6]) m_insert();
-        translate([158.5,54.25,back_height+.6]) m_insert();
-
+        if(sbc_model == "m1s") {
+            translate([75.5,54,back_height+.6]) m_insert();
+            translate([88.75,102.5,back_height+.6]) m_insert();
+            translate([139,105.5,back_height+.6]) m_insert();
+            translate([158.5,54.25,back_height+.6]) m_insert();
+        }
+        if(sbc_model == "m2") {
+            translate([158.5,101,back_height+.6]) m_insert();
+            translate([158.5,29,back_height+.6]) m_insert();
+            translate([75.5,29,back_height+.6]) m_insert();
+            translate([88.575,104,back_height+.6]) m_insert();
+        }
     }
 }
 
 
 module sbc_cover() {
     
-    sbc_size = [90,65,15];
+    sbc_size = sbc_model == "m2" ? [90,90,17] : [90,65,15];
     gap = 2.5;
     width = sbc_size[0]+(2*gap+wallthick);
     depth = sbc_size[1]+(2*gap+wallthick);
     height = sbc_size[2];
     p_thick = 4;
     b_color = "grey";
-echo("SBC Cover", width,depth,height);    
+
     union() {
         difference() {
             union() {
@@ -567,16 +617,16 @@ echo("SBC Cover", width,depth,height);
                 cube_fillet_inside([width,depth,height], 
                     vertical=[c_fillet,c_fillet,c_fillet,c_fillet], top=[0,0,0,0], 
                         bottom=[fillet,fillet,fillet,fillet,fillet], $fn=90);
-            translate([-3.99,7.5,1.5]) color(b_color)
+            translate([-3.99,7.5+cover_offset,1.5]) color(b_color)
                 cube_fillet_inside([10,8.5,3], 
                     vertical=[0,c_fillet,c_fillet,0], top=[0,0,0,0], bottom=[0,0,0,0], $fn=90);
-            translate([-3.99,65.5,1.5]) color(b_color)
+            translate([-3.99,65.5+cover_offset,1.5]) color(b_color)
                 cube_fillet_inside([10,8.5,3], 
                     vertical=[0,c_fillet,c_fillet,0], top=[0,0,0,0], bottom=[0,0,0,0], $fn=90);
-            translate([100.99,7.5,1.5]) color(b_color)
+            translate([100.99,7.5+cover_offset,1.5]) color(b_color)
                 cube_fillet_inside([10,8.5,3], 
                     vertical=[c_fillet,0,0,c_fillet], top=[0,0,0,0], bottom=[0,0,0,0], $fn=90);
-            translate([100.99,65.5,1.5]) color(b_color)
+            translate([100.99,65.5+cover_offset,1.5]) color(b_color)
                 cube_fillet_inside([10,8.5,3], 
                     vertical=[c_fillet,0,0,c_fillet], top=[0,0,0,0], bottom=[0,0,0,0], $fn=90);
                 
@@ -587,25 +637,29 @@ echo("SBC Cover", width,depth,height);
                         bottom=[fillet,fillet,fillet,fillet,fillet], $fn=90);
             
             // vent openings
-            translate([10,12,height-floorthick]) color(b_color) vent_hex(23, 9, 4, 5, 1.5, "landscape");
-
+            if(sbc_model == "m2") {
+                translate([10,12+cover_offset-20,height-floorthick]) color(b_color) vent_hex(23, 13, 4, 5, 1.5, "landscape");
+            }
+            else {
+                translate([10,12+cover_offset,height-floorthick]) color(b_color) vent_hex(23, 9, 4, 5, 1.5, "landscape");
+            }
             // case hole openings
-            translate([-5,7.5,-adj]) color(b_color) cylinder(d=3.2, h=4);
-            translate([-5,65.5,-adj]) color(b_color) cylinder(d=3.2, h=4);
-            translate([102,7.5,-adj]) color(b_color) cylinder(d=3.2, h=4);
-            translate([102,65.5,-adj]) color(b_color) cylinder(d=3.2, h=4);
+            translate([-5,7.5+cover_offset,-adj]) color(b_color) cylinder(d=3.2, h=4);
+            translate([-5,65.5+cover_offset,-adj]) color(b_color) cylinder(d=3.2, h=4);
+            translate([102,7.5+cover_offset,-adj]) color(b_color) cylinder(d=3.2, h=4);
+            translate([102,65.5+cover_offset,-adj]) color(b_color) cylinder(d=3.2, h=4);
             // sbc openings
-            translate([93.5,67.75,floorthick+.5]) color(b_color) rotate([0,0,180]) sbc(sbc_model, enableheatsink = "none", fansize = 0, enablegpio =  "default", enableuart =  "default", enablemask = true);
+            translate([93.5,67.75+cover_offset,floorthick+.5]) color(b_color) rotate([0,0,180]) sbc(sbc_model, enableheatsink = "none", fansize = 0, enablegpio =  "none", enableuart =  "default", enablemask = true);
             if(gpio_opening ==  true) {
                 if(gpio_ext_opening == true) {
-                    translate([7,-1,-adj]) color(b_color) cube([82,12,16]);
+                    translate([7,-1,-adj]) color(b_color) cube([82,12,20]);
                 }
                 else {
-                    translate([7,-1,-adj]) color(b_color) cube([57,12,16]);                    
+                    translate([7,-1,-adj]) color(b_color) cube([57,12,20]);                    
                 }
             }
             if(gpio_ext_opening == true && gpio_opening == false) {
-                translate([66,-1,-adj]) color(b_color) cube([23,12,16]);
+                translate([66,-1,-adj]) color(b_color) cube([23,12,20]);
             }
             translate([-4,45,-1]) color(b_color) cube([7,12,4]);
         }
