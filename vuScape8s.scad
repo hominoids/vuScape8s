@@ -126,7 +126,7 @@ if (view == "platter") {
     
 // model view
 if (view == "model" && orientation == "landscape") {
-//    translate([(width/2),-40,view_height-2+(view_angle-15)]) rotate([90+view_angle,0,180]) {  // landscape
+    translate([(width/2),-40,view_height-2+(view_angle-15)]) rotate([90+view_angle,0,180]) {  // landscape
         if(move_front >= 0) {
             color("grey",1) translate([0,0,-move_front]) case_front();
         }
@@ -188,7 +188,7 @@ if (view == "model" && orientation == "landscape") {
          translate([width+gap+wallthick-7.75,11.5,front_height]) rotate([0,0,90]) bracket("left");
          translate([width-2.5,depth-.5,front_height]) rotate([0,0,90]) bracket("right");
         }
-//    }
+    }
 }
 if (view == "model" && orientation == "portrait") {
     translate([-(depth/2),-40,view_height-2+(view_angle-15)]) rotate([0,270-view_angle,270]) {  // portrait
@@ -649,7 +649,7 @@ module sbc_cover() {
             translate([102,7.5+cover_offset,-adj]) color(b_color) cylinder(d=3.2, h=4);
             translate([102,65.5+cover_offset,-adj]) color(b_color) cylinder(d=3.2, h=4);
             // sbc openings
-            translate([93.5,67.75+cover_offset,floorthick+.5]) color(b_color) rotate([0,0,180]) sbc(sbc_model, enableheatsink = "none", fansize = 0, enablegpio =  "none", enableuart =  "default", enablemask = true);
+            translate([93.5,67.75+cover_offset,floorthick+.5]) color(b_color) rotate([0,0,180]) sbc(sbc_model, enableheatsink = "none", fansize = 0, enablegpio =  "none", enableuart =  "open", enablemask = true);
             if(gpio_opening ==  true) {
                 if(gpio_ext_opening == true) {
                     translate([7,-1,-adj]) color(b_color) cube([82,12,20]);
