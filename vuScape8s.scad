@@ -43,7 +43,7 @@ ups_on = false;
 move_ups_cover = 0; // [-1:200]
 
 /* [Adjustments] */
-sbc_model = "m1s"; // ["m1s","m2"]
+sbc_model = "m2"; // ["m1s","m2"]
 orientation = "landscape"; // [landscape, portrait]
 view_angle = 15; // [10:1:23]
 view_height = 24; // [10:.5:40]
@@ -56,10 +56,13 @@ insert_dia = 4.2; // [2:.1:5]
 /* [Options] */
 brackets = true;
 backframe = true;
-gpio_opening = false;
-gpio_ext_opening = true;
+gpio_opening = "default"; // [default,none,open,block,knockout,vent]
 
-ups_led_down_light =  true;
+top_cover_pattern = "hex_5mm"; //[solid,hex_5mm,hex_8mm,linear_vertical,linear_horizontal]
+cooling = "none"; // [default,none,open,fan_open,fan_1,fan_2,fan_hex,vent,vent_hex_5mm,vent_hex_8mm,custom]
+fan_size = 0; // [0,25,30,40,50,60,70,80,92]
+
+ups_led_down_light =  false;
 ups_location = "none"; // [none, bottom, side]
 prototype_m1s_on = false;
 prototype_ups_on = false;
@@ -112,18 +115,6 @@ adj = .1;
 $fn = 90;
 cover_offset = sbc_model == "m2" ? 25 : 0;
 
-
-// platter view
-if (view == "platter") {
-    translate([width-2,0,back_height-.5]) rotate([0,180,0]) case_back();
-    translate([0,depth+10,0]) case_front();
-    translate([width+120,170,13]) rotate([0,180,0]) sbc_cover();
-    translate([width+140,270,23]) rotate([0,180,0]) ups_cover();
-    translate([width+10,0,0]) back_frame();
-    translate([-150,35,12]) rotate([0,270,0]) bracket("left");
-    translate([-130,30,0]) rotate([0,90,0]) bracket("right");
-    }
-    
 // model view
 if (view == "model" && orientation == "landscape") {
     translate([(width/2),-40,view_height-2+(view_angle-15)]) rotate([90+view_angle,0,180]) {  // landscape
@@ -140,9 +131,10 @@ if (view == "model" && orientation == "landscape") {
          translate([162,115.5,6+front_height]) rotate([0,0,180]) sbc(sbc_model);
         }
         if(move_sbc_cover >= 0 && prototype_m1s_on == false) {
-         translate([gap+wallthick+66,gap+wallthick+44.5-cover_offset,front_height+4+move_sbc_cover]) rotate([0,0,0]) sbc_cover();
+         translate([gap+wallthick+66,gap+wallthick+44.5-cover_offset,front_height+4+move_sbc_cover]) 
+            rotate([0,0,0]) sbc_cover();
         }
-        if(ups_on == true) {
+        if(ups_on == true && sbc_model == "m1s") {
             if(ups_location == "side") {
                 translate([16.5,137.25,4+front_height]) rotate([0,0,270]) hk_m1s_ups();
             }
@@ -150,7 +142,7 @@ if (view == "model" && orientation == "landscape") {
                 translate([60,12.5,4+front_height]) hk_m1s_ups();
             }
         }
-        if(move_ups_cover >= 0) {
+        if(move_ups_cover >= 0 && sbc_model == "m1s") {
             if(ups_location == "side") {
                 translate([13.5,140,4+front_height+move_ups_cover]) rotate([0,0,270]) ups_cover();
             }
@@ -158,10 +150,10 @@ if (view == "model" && orientation == "landscape") {
                 translate([57.25,9.5,4+front_height+move_ups_cover]) ups_cover();
             }
         }
-        if(prototype_m1s_on == true) {
+        if(prototype_m1s_on == true && sbc_model == "m1s") {
             translate([72,50.5,18+front_height]) proto_m1s();
         }
-        if(prototype_ups_on == true) {
+        if(prototype_ups_on == true && sbc_model == "m1s") {
             if(ups_location == "side") {
                 translate([60,12.5,4+front_height]) proto_ups();
             }
@@ -199,15 +191,16 @@ if (view == "model" && orientation == "portrait") {
             color("dimgrey",1) translate([0,0,front_height-(back_height/2)+move_back+adj]) case_back();
         }
         if(vu8s_on == true) {
-         translate([gap+wallthick+lcd_size[0],gap+wallthick+10,2.5+frontthick]) rotate([0,180,0]) hk_vu8s();
+            translate([gap+wallthick+lcd_size[0],gap+wallthick+10,2.5+frontthick]) rotate([0,180,0]) hk_vu8s();
         }
         if(sbc_on == true) {
-         translate([162,115.5,6+front_height]) rotate([0,0,180]) sbc(sbc_model);
+            translate([162,115.5,6+front_height]) rotate([0,0,180]) sbc(sbc_model);
         }
-        if(move_sbc_cover >= 0 && prototype_m1s_on == false) {
-         translate([gap+wallthick+66,gap+wallthick+44,front_height+4+move_sbc_cover]) rotate([0,0,0]) sbc_cover();
+        if((move_sbc_cover >= 0 && prototype_m1s_on == false) || (move_sbc_cover >= 0 && sbc_model == "m2")) {
+            translate([gap+wallthick+66,gap+wallthick+44-cover_offset,front_height+4+move_sbc_cover]) 
+                rotate([0,0,0]) sbc_cover();
         }
-        if(ups_on == true) {
+        if(ups_on == true && sbc_model == "m1s") {
             if(ups_location == "bottom") {
                 translate([16.5,137.25,4+front_height]) rotate([0,0,270]) hk_m1s_ups();
             }
@@ -215,7 +208,7 @@ if (view == "model" && orientation == "portrait") {
                 translate([60,12.5,4+front_height]) hk_m1s_ups();
             }
         }
-        if(move_ups_cover >= 0) {
+        if(move_ups_cover >= 0 && sbc_model == "m1s") {
             if(ups_location == "bottom") {
                 translate([13.5,140,4+front_height+move_ups_cover]) rotate([0,0,270]) ups_cover();
             }
@@ -223,10 +216,10 @@ if (view == "model" && orientation == "portrait") {
                 translate([57.25,9.5,4+front_height+move_ups_cover]) ups_cover();
             }
         }
-        if(prototype_m1s_on == true) {
+        if(prototype_m1s_on == true && sbc_model == "m1s") {
             translate([72,50.5,18+front_height]) proto_m1s();
         }
-        if(prototype_ups_on == true) {
+        if(prototype_ups_on == true && sbc_model == "m1s") {
             if(ups_location == "side") {
                 translate([60,12.5,4+front_height]) proto_ups();
             }
@@ -256,6 +249,17 @@ if (view == "model" && orientation == "portrait") {
     }
 }
 
+// platter view
+if (view == "platter") {
+    translate([width-2,0,back_height-.5]) rotate([0,180,0]) case_back();
+    translate([0,depth+10,0]) case_front();
+    translate([width+120,170,13]) rotate([0,180,0]) sbc_cover();
+    translate([width+140,270,23]) rotate([0,180,0]) ups_cover();
+    translate([width+10,0,0]) back_frame();
+    translate([-150,35,12]) rotate([0,270,0]) bracket("left");
+    translate([-130,30,0]) rotate([0,90,0]) bracket("right");
+    }
+    
 // part view
 if (view == "part") {
     if(individual_part == "front") {
@@ -610,59 +614,96 @@ module sbc_cover() {
     p_thick = 4;
     b_color = "grey";
 
-    union() {
-        difference() {
-            union() {
-            translate([(width/2),(depth/2),height/2]) color(b_color)
-                cube_fillet_inside([width,depth,height], 
-                    vertical=[c_fillet,c_fillet,c_fillet,c_fillet], top=[0,0,0,0], 
-                        bottom=[fillet,fillet,fillet,fillet,fillet], $fn=90);
-            translate([-3.99,7.5+cover_offset,1.5]) color(b_color)
-                cube_fillet_inside([10,8.5,3], 
-                    vertical=[0,c_fillet,c_fillet,0], top=[0,0,0,0], bottom=[0,0,0,0], $fn=90);
-            translate([-3.99,65.5+cover_offset,1.5]) color(b_color)
-                cube_fillet_inside([10,8.5,3], 
-                    vertical=[0,c_fillet,c_fillet,0], top=[0,0,0,0], bottom=[0,0,0,0], $fn=90);
-            translate([100.99,7.5+cover_offset,1.5]) color(b_color)
-                cube_fillet_inside([10,8.5,3], 
-                    vertical=[c_fillet,0,0,c_fillet], top=[0,0,0,0], bottom=[0,0,0,0], $fn=90);
-            translate([100.99,65.5+cover_offset,1.5]) color(b_color)
-                cube_fillet_inside([10,8.5,3], 
-                    vertical=[c_fillet,0,0,c_fillet], top=[0,0,0,0], bottom=[0,0,0,0], $fn=90);
+    difference() {
+        union() {
+            difference() {
+                union() {
+                translate([(width/2),(depth/2),height/2]) color(b_color)
+                    cube_fillet_inside([width,depth,height], 
+                        vertical=[c_fillet,c_fillet,c_fillet,c_fillet], top=[0,0,0,0], 
+                            bottom=[fillet,fillet,fillet,fillet,fillet], $fn=90);
+                translate([-3.99,7.5+cover_offset,1.5]) color(b_color)
+                    cube_fillet_inside([10,8.5,3], 
+                        vertical=[0,c_fillet,c_fillet,0], top=[0,0,0,0], bottom=[0,0,0,0], $fn=90);
+                translate([-3.99,65.5+cover_offset,1.5]) color(b_color)
+                    cube_fillet_inside([10,8.5,3], 
+                        vertical=[0,c_fillet,c_fillet,0], top=[0,0,0,0], bottom=[0,0,0,0], $fn=90);
+                translate([100.99,7.5+cover_offset,1.5]) color(b_color)
+                    cube_fillet_inside([10,8.5,3], 
+                        vertical=[c_fillet,0,0,c_fillet], top=[0,0,0,0], bottom=[0,0,0,0], $fn=90);
+                translate([100.99,65.5+cover_offset,1.5]) color(b_color)
+                    cube_fillet_inside([10,8.5,3], 
+                        vertical=[c_fillet,0,0,c_fillet], top=[0,0,0,0], bottom=[0,0,0,0], $fn=90);
+                    
+                }
+                translate([(width/2),(depth/2),(height/2)-1.5]) color(b_color)
+                    cube_fillet_inside([width-(wallthick*2),depth-(wallthick*2),height], 
+                        vertical=[c_fillet-1,c_fillet-1,c_fillet-1,c_fillet-1],top=[0,0,0,0],
+                            bottom=[fillet,fillet,fillet,fillet,fillet], $fn=90);
                 
+                // top cover openings
+                if(sbc_model == "m2" && top_cover_pattern != "solid") {
+                    if(top_cover_pattern == "hex_5mm") {
+                        translate([10,12+cover_offset-20,height-floorthick]) color(b_color)
+                            vent_hex(23,13,floorthick+4,5,1.5,"horizontal");
+                    }
+                    if(top_cover_pattern == "hex_8mm") {
+                        translate([5,12+cover_offset-20,height-floorthick]) color(b_color)
+                            vent_hex(18,8,floorthick+4,8,1.5,"horizontal");
+                    }
+                    if(top_cover_pattern == "linear_vertical") {
+                        translate([10,12+cover_offset-20,height-floorthick]) color(b_color)
+                            vent(wallthick,75,floorthick+4,1,1,19,"horizontal");
+                    }
+                    if(top_cover_pattern == "linear_horizontal") {
+                        translate([10,12+cover_offset-20,height-floorthick]) color(b_color)
+                            vent(73,wallthick,floorthick+4,1,23,1,"horizontal");
+                    }
+                }
+                if(sbc_model == "m1s" && top_cover_pattern != "solid") {
+                    if(top_cover_pattern == "hex_5mm") {
+                        translate([10,cover_offset+12,height-floorthick]) color(b_color)
+                            vent_hex(23,9,floorthick+4,5,1.5,"horizontal");
+                    }
+                    if(top_cover_pattern == "hex_8mm") {
+                        translate([5,cover_offset+15,height-floorthick]) color(b_color)
+                            vent_hex(18,6,floorthick+4,8,1.5,"horizontal");
+                    }
+                    if(top_cover_pattern == "linear_vertical") {
+                        translate([10,15+cover_offset,height-floorthick]) color(b_color)
+                            vent(wallthick,50,floorthick+4,1,1,20,"horizontal");
+                    }
+                    if(top_cover_pattern == "linear_horizontal") {
+                        translate([10,cover_offset+15,height-floorthick]) color(b_color)
+                            vent(78,wallthick,floorthick+4,1,16,1,"horizontal");
+                    }
+                }
+                // case mount holes
+                translate([-5,7.5+cover_offset,-adj]) color(b_color) cylinder(d=3.2, h=4);
+                translate([-5,65.5+cover_offset,-adj]) color(b_color) cylinder(d=3.2, h=4);
+                translate([102,7.5+cover_offset,-adj]) color(b_color) cylinder(d=3.2, h=4);
+                translate([102,65.5+cover_offset,-adj]) color(b_color) cylinder(d=3.2, h=4);
+
+                // uart opening
+                if(sbc_model == "m1s") {
+                    translate([-4,45,-1]) color(b_color) cube([7,12,4]);
+                }
+                if(sbc_model == "m2") {
+                    translate([78,33,14.5]) color(b_color) slab_r([12,8,3], [2,2,2,2]);
+                }
             }
-            translate([(width/2),(depth/2),(height/2)-1.5]) color(b_color)
-                cube_fillet_inside([width-(wallthick*2),depth-(wallthick*2),height], 
-                    vertical=[c_fillet-1,c_fillet-1,c_fillet-1,c_fillet-1],top=[0,0,0,0],
-                        bottom=[fillet,fillet,fillet,fillet,fillet], $fn=90);
-            
-            // vent openings
+            if(cooling == "default" || cooling == "fan_open" || cooling == "fan_1" || cooling == "fan_2" ||cooling == "fan_hex") {
+                fansize = fan_size == 0 ? 40 : fan_size;
+                translate([17-(fansize-40)/2,33-(fansize-40)/2,15.5]) color(b_color) 
+                    slab([fansize+2,fansize,floorthick],2);
+            }
+            // m2 power button
             if(sbc_model == "m2") {
-                translate([10,12+cover_offset-20,height-floorthick]) color(b_color) vent_hex(23, 13, 4, 5, 1.5, "landscape");
+                translate([87,37,15.5]) color(b_color) button("cutout", [12,8,1.5], [2,2,2,2], .1);
             }
-            else {
-                translate([10,12+cover_offset,height-floorthick]) color(b_color) vent_hex(23, 9, 4, 5, 1.5, "landscape");
-            }
-            // case hole openings
-            translate([-5,7.5+cover_offset,-adj]) color(b_color) cylinder(d=3.2, h=4);
-            translate([-5,65.5+cover_offset,-adj]) color(b_color) cylinder(d=3.2, h=4);
-            translate([102,7.5+cover_offset,-adj]) color(b_color) cylinder(d=3.2, h=4);
-            translate([102,65.5+cover_offset,-adj]) color(b_color) cylinder(d=3.2, h=4);
-            // sbc openings
-            translate([93.5,67.75+cover_offset,floorthick+.5]) color(b_color) rotate([0,0,180]) sbc(sbc_model, enableheatsink = "none", fansize = 0, enablegpio =  "none", enableuart =  "open", enablemask = true);
-            if(gpio_opening ==  true) {
-                if(gpio_ext_opening == true) {
-                    translate([7,-1,-adj]) color(b_color) cube([82,12,20]);
-                }
-                else {
-                    translate([7,-1,-adj]) color(b_color) cube([57,12,20]);                    
-                }
-            }
-            if(gpio_ext_opening == true && gpio_opening == false) {
-                translate([66,-1,-adj]) color(b_color) cube([23,12,20]);
-            }
-            translate([-4,45,-1]) color(b_color) cube([7,12,4]);
         }
+        // sbc openings
+        translate([93.5,67.75+cover_offset,floorthick+.5]) color(b_color) rotate([0,0,180]) sbc(sbc_model, cooling, fan_size, gpio_opening, "open", true);
     }
 }
 

@@ -60,6 +60,27 @@ module slab(size, radius) {
 }
 
 
+/* multi-radius round slab */
+module slab_r(size, radius) {
+
+    x = size[0];
+    y = size[1];
+    z = size[2];
+    r0 = radius[0];
+    r1 = radius[1];
+    r2 = radius[2];
+    r3 = radius[3];
+
+    linear_extrude(height=z)
+    hull() {
+        translate([0+radius[0] ,0+radius[0], 0]) circle(r=radius[0]);
+        translate([0+radius[1], y-radius[1], 0]) circle(r=radius[1]);
+        translate([x-radius[2], y-radius[2], 0]) circle(r=radius[2]);
+        translate([x-radius[3], 0+radius[3], 0]) circle(r=radius[3]);
+    }
+}
+
+
 /* slot module */
 module slot(hole,length,depth) {
     
@@ -190,7 +211,7 @@ module button(style, size, radius, pad) {
     }
     if(style == "cutout") {
         difference() {
-            translate([-size[0]+2,-3-size[1]/2,0]) slab_r([size[0]+2,size[1]+6,size[2]-2*adjust], [.1,.1,.1,.1]);            
+            translate([-size[0]+2,-3-size[1]/2,0]) slab_r([size[0]+2,size[1]+6,size[2]-2*adjust], [2,2,2,2]);            
             difference() {
                 translate([-size[0]+3,-size[1]/2,-adjust]) 
                     slab_r([size[0],size[1],size[2]], [radius[0],radius[1],radius[2],radius[3]]);
