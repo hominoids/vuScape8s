@@ -694,8 +694,14 @@ module sbc_cover() {
             }
             if(cooling == "default" || cooling == "fan_open" || cooling == "fan_1" || cooling == "fan_2" ||cooling == "fan_hex") {
                 fansize = fan_size == 0 ? 40 : fan_size;
-                translate([17-(fansize-40)/2,33-(fansize-40)/2,15.5]) color(b_color) 
-                    slab([fansize+2,fansize,floorthick],2);
+                if(sbc_model == "m2") {
+                    translate([17-(fansize-40)/2,33-(fansize-40)/2,15.5]) color(b_color) 
+                        slab([fansize+2,fansize,floorthick],2);
+                }
+                if(sbc_model == "m1s") {
+                    translate([32-(fansize-40)/2,15.5-(fansize-40)/2,13.5]) color(b_color) 
+                        slab([fansize+2,fansize,floorthick],2);
+                }
             }
             // m2 power button
             if(sbc_model == "m2") {
