@@ -559,6 +559,8 @@ module back_frame() {
             translate([158.5,29,back_height-2*floorthick-adj]) color(b_color) cylinder(d=insert_dia, h=9);
             translate([75.5,29,back_height-2*floorthick-adj]) color(b_color) cylinder(d=insert_dia, h=9);
             translate([88.575,104,back_height-2*floorthick-adj]) color(b_color) cylinder(d=insert_dia, h=9);
+            // uart trim
+            translate([153.5,31.5,back_height+1.5])  color(b_color) cube([10,5,5]);
         }
     }
     if(view == "model") {
