@@ -55,6 +55,7 @@ insert_dia = 4.2; // [2:.1:5]
 
 /* [Options] */
 brackets = true;
+flip_view = false;
 backframe = true;
 gpio_opening = "default"; // [default,none,open,block,knockout,vent]
 
@@ -68,12 +69,12 @@ prototype_m1s_on = false;
 prototype_ups_on = false;
 
 /* [Hidden] */
-flip_view = false;
 wallthick = 2;
 floorthick = 1.5;
 frontthick = 1.5;
 gap = 1;
 sbc_cover_gap = 2;
+sbc_size = sbc_model == "m2" ? [90,90,17] : [90,65,15];
 
 c_fillet = 4;
 fillet = 0;
@@ -118,7 +119,7 @@ cover_offset = sbc_model == "m2" ? 25 : 0;
 
 // model view
 if (view == "model" && orientation == "landscape") {
-//    translate([(width/2),-40,view_height-2+(view_angle-15)]) rotate([90+view_angle,0,180]) {  // landscape
+    translate([(width/2),-40,view_height-2+(view_angle-15)]) rotate([90+view_angle,0,180]) {  // landscape
         if(move_front >= 0) {
             color("grey",1) translate([0,0,-move_front]) case_front();
         }
@@ -132,8 +133,7 @@ if (view == "model" && orientation == "landscape") {
          translate([162,115.5,6+front_height]) rotate([0,0,180]) sbc(sbc_model);
         }
         if(move_sbc_cover >= 0 && prototype_m1s_on == false) {
-         translate([wallthick+64.5+sbc_cover_gap,wallthick+42.5-cover_offset+sbc_cover_gap,front_height+4+move_sbc_cover]) 
-            rotate([0,0,0]) sbc_cover();
+         translate([wallthick+64.5+sbc_cover_gap,wallthick+42.5-cover_offset+sbc_cover_gap,front_height+4+move_sbc_cover]) sbc_cover();
         }
         if(ups_on == true && sbc_model == "m1s") {
             if(ups_location == "side") {
@@ -181,7 +181,7 @@ if (view == "model" && orientation == "landscape") {
          translate([width+gap+wallthick-7.75,11.5,front_height]) rotate([0,0,90]) bracket("left");
          translate([width-2.5,depth-.5,front_height]) rotate([0,0,90]) bracket("right");
         }
-//    }
+    }
 }
 if (view == "model" && orientation == "portrait") {
     translate([-(depth/2),-40,view_height-2+(view_angle-15)]) rotate([0,270-view_angle,270]) {  // portrait
@@ -609,7 +609,6 @@ module back_frame() {
 
 module sbc_cover() {
     
-    sbc_size = sbc_model == "m2" ? [90,90,17] : [90,65,15];
     width = sbc_size[0]+2*(sbc_cover_gap+wallthick);
     depth = sbc_size[1]+2*(sbc_cover_gap+wallthick);
     height = sbc_size[2]+2;
@@ -829,7 +828,7 @@ module bracket(side) {
             translate([-30,-94-(view_height-18)-(1.4*(view_angle-15)),-10]) 
                 rotate([-view_angle,0,0]) color(b_color) cube([50,70,140]);
             
-            // corner case holes
+            // bracket holes
             if(side == "left") {
                 if(vu8s_mount == "thruhole") {
                     translate([-4.5,3.5,-adj]) color(b_color) cylinder(d=3.2, h=12);
@@ -852,7 +851,36 @@ module bracket(side) {
                     translate([-4.5,146.5,-adj]) color(b_color) cylinder(d=3.2, h=12);
                     translate([-4.5,3.5,2]) color(b_color) cylinder(r=3.3, h=6.1, $fn=6);
                     translate([-4.5,146.5,2]) color(b_color) cylinder(r=3.3, h=6.1, $fn=6);
-                }            }
+                }
+                // left pillar mount holes for flip view
+                if(right_pillar_mount == "recessed" && flip_view == true) {
+                    translate([-4.75,13.25,-adj]) color(b_color) cylinder(d=3.2, h=14);
+                    translate([-4.75,13.5,2]) color(b_color) cylinder(d=9.2, h=14);
+                    translate([-4.75,13.5,2]) color(b_color) slot(9.2, 10, 14);
+
+                    translate([-4.5,137.75,-adj]) color(b_color) cylinder(d=3.2, h=14);
+                    translate([-4.5,137.75,2]) color(b_color) cylinder(d=9.2, h=14);
+                    translate([-4.75,137.625,2]) color(b_color) slot(9.2, 10, 14);
+                }
+                if(right_pillar_mount == "thruhole" && flip_view == true) {
+                    translate([-4.75,13.25,-adj]) color(b_color) cylinder(d=3.2, h=14);
+                    translate([-4.5,137.75,-adj]) color(b_color) cylinder(d=3.2, h=14);
+                }
+
+                 // hk case mount holes
+                if(sbc_mount == "recessed" && flip_view == true) {
+                    translate([-6.5,108,-adj]) color(b_color) cylinder(d=3.2, h=14);
+                    translate([-6.5,108,1.25]) color(b_color) cylinder(d=9.2, h=14);
+                    translate([-16.75,108,1.25]) color(b_color) slot(9.2, 10, 14);
+                    translate([-6.5,50,-adj]) color(b_color) cylinder(d=3.2, h=14);
+                    translate([-6.5,50,1.25]) color(b_color) cylinder(d=9.2, h=14);
+                    translate([-16.75,50,1.25]) color(b_color) slot(9.2, 10, 14);
+                }
+                if(sbc_mount == "insert" && flip_view == true) {
+                    translate([-5.5,108,-adj]) color(b_color) cylinder(d=insert_dia, h=14);
+                    translate([-5.5,50,-adj]) color(b_color) cylinder(d=insert_dia, h=14);
+                }
+           }
             if(side == "right") {
                 if(vu8s_mount == "thruhole") {
                     translate([-6.5,3.5,-adj]) color(b_color) cylinder(d=3.2, h=12);
@@ -876,8 +904,8 @@ module bracket(side) {
                     translate([-6.5,3.5,2]) color(b_color) cylinder(r=3.3, h=6.1, $fn=6);
                     translate([-6.5,146.5,2]) color(b_color) cylinder(r=3.3, h=6.1, $fn=6);
                 }
-                // hk sbc case mount holes
-                if(sbc_mount == "recessed") {
+                // hk case mount holes
+                if(sbc_mount == "recessed" && flip_view == false) {
                     translate([-6.5,108,-adj]) color(b_color) cylinder(d=3.2, h=14);
                     translate([-6.5,108,1.25]) color(b_color) cylinder(d=9.2, h=14);
                     translate([-16.75,108,1.25]) color(b_color) slot(9.2, 10, 14);
@@ -885,21 +913,21 @@ module bracket(side) {
                     translate([-6.5,50,1.25]) color(b_color) cylinder(d=9.2, h=14);
                     translate([-16.75,50,1.25]) color(b_color) slot(9.2, 10, 14);
                 }
-                if(sbc_mount == "insert") {
+                if(sbc_mount == "insert" && flip_view == false) {
                     translate([-6.5,108,-adj]) color(b_color) cylinder(d=insert_dia, h=14);
                     translate([-6.5,50,-adj]) color(b_color) cylinder(d=insert_dia, h=14);
                 }
-
                 // right pillar mount holes
-                if(right_pillar_mount == "recessed") {
+                if(right_pillar_mount == "recessed" && flip_view == false) {
                     translate([-6.5,12.25,-adj]) color(b_color) cylinder(d=3.2, h=14);
                     translate([-6.5,12.25,2]) color(b_color) cylinder(d=9.2, h=14);
                     translate([-16.75,12.25,2]) color(b_color) slot(9.2, 10, 14);
+
                     translate([-6.25,136.5,-adj]) color(b_color) cylinder(d=3.2, h=14);
                     translate([-6.25,136.5,2]) color(b_color) cylinder(d=9.2, h=14);
                     translate([-16.5,136.5,2]) color(b_color) slot(9.2, 10, 14);
                 }
-                if(right_pillar_mount == "thruhole") {
+                if(right_pillar_mount == "thruhole" && flip_view == false) {
                     translate([-6.5,12,-adj]) color(b_color) cylinder(d=3.2, h=14);
                     translate([-6.5,136,-adj]) color(b_color) cylinder(d=3.2, h=14);
                 }
@@ -911,13 +939,17 @@ module bracket(side) {
                     translate([-4.5,3.5,3]) m_insert();
                     translate([-4.5,146.5,3]) m_insert();
                 }
+                if(sbc_mount == "insert" && flip_view == true) {
+                    translate([-5.5,108,adj]) m_insert();
+                    translate([-5.5,50,adj]) m_insert();
+                }
             }
             if(side == "right") {
                 if(vu8s_mount == "insert") {
                     translate([-6.5,3.5,3]) m_insert();
                     translate([-6.5,146.5,3]) m_insert();
                 }
-                if(sbc_mount == "insert") {
+                if(sbc_mount == "insert" && flip_view == false) {
                     translate([-6.5,108,adj]) m_insert();
                     translate([-6.5,50,adj]) m_insert();
                 }
