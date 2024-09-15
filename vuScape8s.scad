@@ -713,7 +713,7 @@ module sbc_cover() {
             }
         }
         // sbc openings
-        translate([93,67.75+cover_offset,floorthick+.5]) color(b_color) rotate([0,0,180]) sbc(sbc_model, cooling, fan_size, gpio_opening, "open", true);
+        translate([93.5,69+cover_offset,floorthick+.5]) color(b_color) rotate([0,0,180]) sbc(sbc_model, cooling, fan_size, gpio_opening, "open", true);
     }
 }
 
