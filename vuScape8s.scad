@@ -16,8 +16,9 @@
     Code released under GPLv3: http://www.gnu.org/licenses/gpl.html
 
     20231204 Version 1.0    vuScape8s, Odroid-M1s and M1s-UPS integrated Case initial release.
-    2024090x Version 2.0    Added Odroid-M2
+    202409xx Version 2.0    Added Odroid-M2
     
+    vuscape8s_assembled()
     case_front()
     case_back()
     back_frame()
@@ -142,7 +143,7 @@ if (view == "model" && orientation == "portrait") {
         }
         if((move_sbc_cover >= 0 && prototype_m1s_on == false) || (move_sbc_cover >= 0 && sbc_model == "m2")) {
             translate([gap+wallthick+66,gap+wallthick+44-cover_offset,front_height+4+move_sbc_cover]) 
-                rotate([0,0,0]) sbc_cover();
+                sbc_cover();
         }
         if(ups_on == true && sbc_model == "m1s") {
             if(ups_location == "bottom") {
@@ -175,8 +176,8 @@ if (view == "model" && orientation == "portrait") {
          translate([0,0,front_height]) back_frame();
         }
         if(brackets == true && orientation == "landscape" && flip_view == false) {
-         translate([gap+wallthick+8.5,4.5,front_height]) rotate([0,0,0]) bracket("left");
-         translate([width-.5,4.5,front_height]) rotate([0,0,0]) bracket("right");
+         translate([gap+wallthick+8.5,4.5,front_height]) bracket("left");
+         translate([width-.5,4.5,front_height]) bracket("right");
         }
         if(brackets == true && orientation == "landscape" && flip_view == true) {
          translate([gap+wallthick+width-14.5,depth-4.5,front_height]) rotate([0,0,180]) bracket("left");
@@ -282,8 +283,8 @@ module vuscape8s_assembled() {
          translate([0,0,front_height+adj]) back_frame();
         }
         if(brackets == true && orientation == "landscape" && flip_view == false) {
-         translate([gap+wallthick+8.5,4.5,front_height]) rotate([0,0,0]) bracket("left");
-         translate([width-.5,4.5,front_height]) rotate([0,0,0]) bracket("right");
+         translate([gap+wallthick+8.5,4.5,front_height]) bracket("left");
+         translate([width-.5,4.5,front_height]) bracket("right");
         }
         if(brackets == true && orientation == "landscape" && flip_view == true) {
          translate([gap+wallthick+width-14.5,depth-4.5,front_height]) rotate([0,0,180]) bracket("left");
@@ -423,8 +424,11 @@ module back_frame() {
                     vertical=[c_fillet,c_fillet,c_fillet,c_fillet], top=[0,0,0,0], bottom=[0,0,0,0], $fn=90);
             if(sbc_model == "m1s") {
                // lower middle bar
-                translate([width-gap-wallthick-10-pillar_x/2,gap+wallthick+52,p_thick/2]) color(b_color)
-                    cube_fillet_inside([pillar_x-40,p_width,p_thick], 
+                translate([width-gap-wallthick+36-pillar_x/2,gap+wallthick+52,p_thick/2]) color(b_color)
+                    cube_fillet_inside([20,p_width,p_thick], 
+                        vertical=[c_fillet,c_fillet,c_fillet,c_fillet], top=[0,0,0,0], bottom=[0,0,0,0], $fn=90);
+                translate([width-gap-wallthick-57-pillar_x/2,gap+wallthick+52,p_thick/2]) color(b_color)
+                    cube_fillet_inside([20,p_width,p_thick], 
                         vertical=[c_fillet,c_fillet,c_fillet,c_fillet], top=[0,0,0,0], bottom=[0,0,0,0], $fn=90);
                 // upper middle bar
                 translate([width-gap-wallthick-10-(pillar_x/2),gap+wallthick+109,p_thick/2]) color(b_color) 
@@ -499,20 +503,19 @@ module back_frame() {
         translate([width-gap-wallthick-10+adj,gap+wallthick+132.75,-adj]) color(b_color) cube([10,10,2]);
         translate([gap+wallthick+55+adj,gap+wallthick+75,9]) rotate([270,0,0]) color(b_color) cylinder(d=16, h=26);
         if(sbc_model == "m1s") {
-            translate([gap+wallthick+101+adj,gap+wallthick+57,-adj]) rotate([0,0,0]) color(b_color) slot(12,43,4+(2*adj));
+            translate([gap+wallthick+87.5+adj,gap+wallthick+47,-adj]) color(b_color) slot(20,53,4+(2*adj));
             translate([gap+wallthick+67+adj,gap+wallthick+90.5,-adj]) rotate([0,0,90]) color(b_color) slot(10,7,6);
-            translate([gap+wallthick+26.5+adj,gap+wallthick+27.5,-adj]) rotate([0,0,0]) color(b_color) slot(10,6.5,6);
-            translate([gap+wallthick+26.5+adj,gap+wallthick+125.5,-adj]) rotate([0,0,0]) color(b_color) slot(10,6.5,6);
+            translate([gap+wallthick+26.5+adj,gap+wallthick+27.5,-adj]) color(b_color) slot(10,6.5,6);
+            translate([gap+wallthick+26.5+adj,gap+wallthick+125.5,-adj]) color(b_color) slot(10,6.5,6);
             translate([gap+wallthick+163+adj,gap+wallthick+23,-adj]) rotate([0,0,90]) color(b_color) slot(10,6.5,6);
-            translate([gap+wallthick+147+adj,gap+wallthick+112.5,-adj]) rotate([0,0,0]) color(b_color) slot(10,11.5,6);
-            translate([gap+wallthick+70+adj,gap+wallthick+106,-adj]) rotate([0,0,0]) color(b_color) slot(10,6.5,6);
+            translate([gap+wallthick+147+adj,gap+wallthick+112.5,-adj]) color(b_color) slot(10,11.5,6);
+            translate([gap+wallthick+70+adj,gap+wallthick+106,-adj]) color(b_color) slot(10,6.5,6);
             translate([gap+wallthick+66+adj,gap+wallthick+23,-adj]) rotate([0,0,90]) color(b_color) slot(10,6.5,6);
         }
-        translate([gap+wallthick+100+adj,gap+wallthick+104,-adj]) rotate([0,0,0]) color(b_color) slot(12,22,4+(2*adj));
+        translate([gap+wallthick+100+adj,gap+wallthick+108,-adj]) color(b_color) slot(20,22,4+(2*adj));
         if(sbc_model == "m2") {
             translate([gap+wallthick+163+adj,gap+wallthick+33.5,-adj]) rotate([0,0,90]) color(b_color) slot(10,6.5,6);
-            translate([gap+wallthick+100+adj,gap+wallthick+18,-adj]) rotate([0,0,0]) color(b_color) slot(10,43.5,6);
-//            #translate([gap+wallthick+143+adj,gap+wallthick+112.5,-adj]) rotate([0,0,0]) color(b_color) slot(10,11.5,6);
+            translate([gap+wallthick+97+adj,gap+wallthick+18.5,15.5]) rotate([0,90,0]) color(b_color) cylinder(d=30,h=50);
         }
         
         // lower bar holes
