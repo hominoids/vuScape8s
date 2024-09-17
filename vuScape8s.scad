@@ -55,7 +55,7 @@ insert_dia = 4.2; // [2:.1:5]
 
 /* [Options] */
 brackets = true;
-flip_view = false;
+flip_view = true;
 backframe = true;
 gpio_opening = "default"; // [default,none,open,block,knockout,vent]
 
@@ -118,70 +118,13 @@ $fn = 90;
 cover_offset = sbc_model == "m2" ? 25 : 0;
 
 // model view
-if (view == "model" && orientation == "landscape") {
-    translate([(width/2),-40,view_height-2+(view_angle-15)]) rotate([90+view_angle,0,180]) {  // landscape
-        if(move_front >= 0) {
-            color("grey",1) translate([0,0,-move_front]) case_front();
-        }
-        if(move_back >= 0) {
-            color("dimgrey",1) translate([0,0,front_height-(back_height/2)+move_back+adj]) case_back();
-        }
-        if(vu8s_on == true) {
-         translate([gap+wallthick+lcd_size[0],gap+wallthick+10,2.5+frontthick]) rotate([0,180,0]) hk_vu8s();
-        }
-        if(sbc_on == true) {
-         translate([162,115.5,6+front_height]) rotate([0,0,180]) sbc(sbc_model);
-        }
-        if(move_sbc_cover >= 0 && prototype_m1s_on == false) {
-         translate([wallthick+64.5+sbc_cover_gap,wallthick+42.5-cover_offset+sbc_cover_gap,front_height+4+move_sbc_cover]) sbc_cover();
-        }
-        if(ups_on == true && sbc_model == "m1s") {
-            if(ups_location == "side") {
-                translate([16.5,137.25,4+front_height]) rotate([0,0,270]) hk_m1s_ups();
-            }
-            if(ups_location == "bottom") {
-                translate([60,12.5,4+front_height]) hk_m1s_ups();
-            }
-        }
-        if(move_ups_cover >= 0 && sbc_model == "m1s") {
-            if(ups_location == "side") {
-                translate([13.5,140,4+front_height+move_ups_cover]) rotate([0,0,270]) ups_cover();
-            }
-            if(ups_location == "bottom") {
-                translate([57.25,9.5,4+front_height+move_ups_cover]) ups_cover();
-            }
-        }
-        if(prototype_m1s_on == true && sbc_model == "m1s") {
-            translate([72,50.5,18+front_height]) proto_m1s();
-        }
-        if(prototype_ups_on == true && sbc_model == "m1s") {
-            if(ups_location == "side") {
-                translate([60,12.5,4+front_height]) proto_ups();
-            }
-            if(ups_location == "bottom") {
-                translate([16.5,137.25,4+front_height]) rotate([0,0,270]) proto_ups();
-            }
-        }
-        if(backframe == true) {
-         translate([0,0,front_height+adj]) back_frame();
-        }
-        if(brackets == true && orientation == "landscape" && flip_view == false) {
-         translate([gap+wallthick+8.5,4.5,front_height]) rotate([0,0,0]) bracket("left");
-         translate([width-.5,4.5,front_height]) rotate([0,0,0]) bracket("right");
-        }
-        if(brackets == true && orientation == "landscape" && flip_view == true) {
-         translate([gap+wallthick+width-14.5,depth-4.5,front_height]) rotate([0,0,180]) bracket("left");
-         translate([.5,depth-4.5,front_height]) rotate([0,0,180]) bracket("right");
-        }
-        if(brackets == true && orientation == "portrait" && flip_view == false) {
-         translate([gap+wallthick+1.5,depth-11.5,front_height]) rotate([0,0,270]) bracket("left");
-         translate([2.5,.5,front_height]) rotate([0,0,270]) bracket("right");
-        }
-        if(brackets == true && orientation == "portrait" && flip_view == true) {
-         translate([width+gap+wallthick-7.75,11.5,front_height]) rotate([0,0,90]) bracket("left");
-         translate([width-2.5,depth-.5,front_height]) rotate([0,0,90]) bracket("right");
-        }
-    }
+if (view == "model" && orientation == "landscape" && flip_view == false) {
+    // landscape
+    translate([(width/2),-40,view_height-2+(view_angle-15)]) rotate([90+view_angle,0,180]) vuscape8s_assembled();
+}
+if (view == "model" && orientation == "landscape" && flip_view == true) {
+    // landscape
+    translate([-(width/2),0,view_height-8+depth+(view_angle-15)]) rotate([90-view_angle,180,180]) vuscape8s_assembled();
 }
 if (view == "model" && orientation == "portrait") {
     translate([-(depth/2),-40,view_height-2+(view_angle-15)]) rotate([0,270-view_angle,270]) {  // portrait
@@ -289,6 +232,71 @@ if (view == "part") {
     if(individual_part == "bracket_right") {
         translate([0,30,0]) rotate([0,90,0]) bracket("right");
     }
+}
+
+
+module vuscape8s_assembled() {
+        if(move_front >= 0) {
+            color("grey",1) translate([0,0,-move_front]) case_front();
+        }
+        if(move_back >= 0) {
+            color("dimgrey",1) translate([0,0,front_height-(back_height/2)+move_back+adj]) case_back();
+        }
+        if(vu8s_on == true) {
+         translate([gap+wallthick+lcd_size[0],gap+wallthick+10,2.5+frontthick]) rotate([0,180,0]) hk_vu8s();
+        }
+        if(sbc_on == true) {
+         translate([162,115.5,6+front_height]) rotate([0,0,180]) sbc(sbc_model);
+        }
+        if(move_sbc_cover >= 0 && prototype_m1s_on == false) {
+         translate([wallthick+64.5+sbc_cover_gap,wallthick+42.5-cover_offset+sbc_cover_gap,front_height+4+move_sbc_cover]) sbc_cover();
+        }
+        if(ups_on == true && sbc_model == "m1s") {
+            if(ups_location == "side") {
+                translate([16.5,137.25,4+front_height]) rotate([0,0,270]) hk_m1s_ups();
+            }
+            if(ups_location == "bottom") {
+                translate([60,12.5,4+front_height]) hk_m1s_ups();
+            }
+        }
+        if(move_ups_cover >= 0 && sbc_model == "m1s") {
+            if(ups_location == "side") {
+                translate([13.5,140,4+front_height+move_ups_cover]) rotate([0,0,270]) ups_cover();
+            }
+            if(ups_location == "bottom") {
+                translate([57.25,9.5,4+front_height+move_ups_cover]) ups_cover();
+            }
+        }
+        if(prototype_m1s_on == true && sbc_model == "m1s") {
+            translate([72,50.5,18+front_height]) proto_m1s();
+        }
+        if(prototype_ups_on == true && sbc_model == "m1s") {
+            if(ups_location == "side") {
+                translate([60,12.5,4+front_height]) proto_ups();
+            }
+            if(ups_location == "bottom") {
+                translate([16.5,137.25,4+front_height]) rotate([0,0,270]) proto_ups();
+            }
+        }
+        if(backframe == true) {
+         translate([0,0,front_height+adj]) back_frame();
+        }
+        if(brackets == true && orientation == "landscape" && flip_view == false) {
+         translate([gap+wallthick+8.5,4.5,front_height]) rotate([0,0,0]) bracket("left");
+         translate([width-.5,4.5,front_height]) rotate([0,0,0]) bracket("right");
+        }
+        if(brackets == true && orientation == "landscape" && flip_view == true) {
+         translate([gap+wallthick+width-14.5,depth-4.5,front_height]) rotate([0,0,180]) bracket("left");
+         translate([.5,depth-4.5,front_height]) rotate([0,0,180]) bracket("right");
+        }
+        if(brackets == true && orientation == "portrait" && flip_view == false) {
+         translate([gap+wallthick+1.5,depth-11.5,front_height]) rotate([0,0,270]) bracket("left");
+         translate([2.5,.5,front_height]) rotate([0,0,270]) bracket("right");
+        }
+        if(brackets == true && orientation == "portrait" && flip_view == true) {
+         translate([width+gap+wallthick-7.75,11.5,front_height]) rotate([0,0,90]) bracket("left");
+         translate([width-2.5,depth-.5,front_height]) rotate([0,0,90]) bracket("right");
+        }
 }
 
 
@@ -503,6 +511,7 @@ module back_frame() {
         translate([gap+wallthick+100+adj,gap+wallthick+104,-adj]) rotate([0,0,0]) color(b_color) slot(12,22,4+(2*adj));
         if(sbc_model == "m2") {
             translate([gap+wallthick+163+adj,gap+wallthick+33.5,-adj]) rotate([0,0,90]) color(b_color) slot(10,6.5,6);
+            translate([gap+wallthick+100+adj,gap+wallthick+18,-adj]) rotate([0,0,0]) color(b_color) slot(10,43.5,6);
 //            #translate([gap+wallthick+143+adj,gap+wallthick+112.5,-adj]) rotate([0,0,0]) color(b_color) slot(10,11.5,6);
         }
         
@@ -611,8 +620,7 @@ module sbc_cover() {
     
     width = sbc_size[0]+2*(sbc_cover_gap+wallthick);
     depth = sbc_size[1]+2*(sbc_cover_gap+wallthick);
-    height = sbc_size[2]+2;
-//    gap = 2.5;
+    height = sbc_size[2]+3;
     p_thick = 4;
     b_color = "grey";
 
@@ -686,13 +694,24 @@ module sbc_cover() {
                 translate([102,7.5+cover_offset,-adj]) color(b_color) cylinder(d=3.2, h=4);
                 translate([102,65.5+cover_offset,-adj]) color(b_color) cylinder(d=3.2, h=4);
 
-                // uart opening
+                // case recess holes
+                translate([-5,7.5+cover_offset,1.5]) color(b_color) cylinder(d=5.5, h=4);
+                translate([-5,65.5+cover_offset,1.5]) color(b_color) cylinder(d=5.5, h=4);
+                translate([102,7.5+cover_offset,1.5]) color(b_color) cylinder(d=5.5, h=4);
+                translate([102,65.5+cover_offset,1.5]) color(b_color) cylinder(d=5.5, h=4);
+
+                // m1s uart & fpc opening
                 if(sbc_model == "m1s") {
-                    translate([-4,45,-1]) color(b_color) cube([7,12,4]);
+                    translate([-4,37,-1]) color(b_color) cube([7,17,4]);
                 }
                 // m2 power button opening
                 if(sbc_model == "m2") {
-                    translate([78,33,height-floorthick-1]) color(b_color) slab_r([12,8,3], [2,2,2,2]);
+                    translate([79,34.5,height-floorthick-1]) color(b_color) slab_r([12,8,3], [2,2,2,2]);
+                }
+                // m2 fpc opening
+                if(sbc_model == "m2") {
+                    translate([-3,61,height-floorthick-13]) rotate([0,90,0]) 
+                        color(b_color) slab_r([8,19,6], [2,2,2,2]);
                 }
             }
             if(cooling == "default" || cooling == "fan_open" || cooling == "fan_1" || cooling == "fan_2" ||cooling == "fan_hex") {
@@ -708,11 +727,11 @@ module sbc_cover() {
             }
             // m2 power button
             if(sbc_model == "m2") {
-                translate([87,37,height-floorthick]) color(b_color) button("cutout", [12,8,1.5], [2,2,2,2], 1);
+                translate([88,38.5,height-floorthick]) color(b_color) button("cutout", [12,8,1.5], [2,2,2,2], 2);
             }
         }
         // sbc openings
-        translate([93.5,69+cover_offset,floorthick+.5]) color(b_color) rotate([0,0,180]) sbc(sbc_model, cooling, fan_size, gpio_opening, "open", true);
+        translate([93.5,69+cover_offset,floorthick]) color(b_color) rotate([0,0,180]) sbc(sbc_model, cooling, fan_size, gpio_opening, "open", true);
     }
 }
 
