@@ -84,28 +84,28 @@ module video(type, loc_x, loc_y, loc_z, side, rotation, size, data, pcbsize_z, e
         if(enablemask == true && cmask == true && mstyle == "thruwall") {
             // hdmi opening
             if(side == "top" && rotation == 0) {
-                place(loc_x-1, loc_y+back-size_ym/2, loc_z, size_xm, size_ym, rotation, side, pcbsize_z) hdmi_open("hdmi_a_thruwall",mlen);
+                place(loc_x-1, loc_y+back-size_ym/2, loc_z-.25, size_xm, size_ym, rotation, side, pcbsize_z) hdmi_open("hdmi_a_thruwall",mlen);
             }
             if(side == "top" && rotation == 90) {
-                place(loc_x+back-size_ym/2, loc_y, loc_z, size_xm, size_ym, rotation, side, pcbsize_z) hdmi_open("hdmi_a_thruwall",mlen);
+                place(loc_x+back-size_ym/2, loc_y, loc_z-.25, size_xm, size_ym, rotation, side, pcbsize_z) hdmi_open("hdmi_a_thruwall",mlen);
             }
             if(side == "top" && rotation == 180) {
-                place(loc_x, loc_y-back-(size_ym-size_y)+size_ym/2, loc_z, size_xm, size_ym, rotation, side, pcbsize_z) hdmi_open("hdmi_a_thruwall",mlen);
+                place(loc_x, loc_y-back-(size_ym-size_y)+size_ym/2, loc_z-.25, size_xm, size_ym, rotation, side, pcbsize_z) hdmi_open("hdmi_a_thruwall",mlen);
             }
             if(side == "top" && rotation == 270) {
-                place(loc_x-back-(size_ym-size_y)+size_ym/2, loc_y-1, loc_z, size_xm, size_ym, rotation, side, pcbsize_z) hdmi_open("hdmi_a_thruwall",mlen);
+                place(loc_x-back-(size_ym-size_y)+size_ym/2, loc_y-1, loc_z-.25, size_xm, size_ym, rotation, side, pcbsize_z) hdmi_open("hdmi_a_thruwall",mlen);
             }
             if(side == "bottom" && rotation == 0) {
-                place(loc_x, loc_y+back-size_ym/2, loc_z, size_xm, size_ym, rotation,side, pcbsize_z) hdmi_open("hdmi_a_thruwall",mlen);
+                place(loc_x, loc_y+back-size_ym/2, loc_z-.25, size_xm, size_ym, rotation,side, pcbsize_z) hdmi_open("hdmi_a_thruwall",mlen);
             }
             if(side == "bottom" && rotation == 90) {
-                place(loc_x-back-(size_ym-size_y)+size_ym/2, loc_y, loc_z, size_xm, size_ym, rotation, side, pcbsize_z) hdmi_open("hdmi_a_thruwall",mlen);
+                place(loc_x-back-(size_ym-size_y)+size_ym/2, loc_y, loc_z-.25, size_xm, size_ym, rotation, side, pcbsize_z) hdmi_open("hdmi_a_thruwall",mlen);
             }
             if(side == "bottom" && rotation == 180) {
-                place(loc_x-1, loc_y-back-(size_ym-size_y)+size_ym/2, loc_z, size_xm, size_ym, rotation, side, pcbsize_z) hdmi_open("hdmi_a_thruwall",mlen);
+                place(loc_x-1, loc_y-back-(size_ym-size_y)+size_ym/2, loc_z-.25, size_xm, size_ym, rotation, side, pcbsize_z) hdmi_open("hdmi_a_thruwall",mlen);
             }
             if(side == "bottom" && rotation == 270) {
-                place(loc_x+back-size_ym/2, loc_y-1, loc_z, size_xm, size_ym, rotation, side, pcbsize_z) hdmi_open("hdmi_a_thruwall",mlen);
+                place(loc_x+back-size_ym/2, loc_y-1, loc_z-.25, size_xm, size_ym, rotation, side, pcbsize_z) hdmi_open("hdmi_a_thruwall",mlen);
             }
         }
         if(enablemask == false) {

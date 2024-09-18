@@ -125,7 +125,9 @@ if (view == "model" && orientation == "landscape" && flip_view == false) {
 }
 if (view == "model" && orientation == "landscape" && flip_view == true) {
     // landscape
-    translate([-(width/2),0,view_height-8+depth+(view_angle-15)]) rotate([90-view_angle,180,180]) vuscape8s_assembled();
+    translate([-(width/2),0,view_height-8+depth+(view_angle-15)]) rotate([90-view_angle,180,180]) 
+        vuscape8s_assembled();
+//             translate([162,115.5,6+front_height]) color("blue") rotate([0,0,180]) sbc(sbc_model, cooling, fan_size, gpio_opening, "open", true);
 }
 if (view == "model" && orientation == "portrait") {
     translate([-(depth/2),-40,view_height-2+(view_angle-15)]) rotate([0,270-view_angle,270]) {  // portrait
@@ -709,7 +711,7 @@ module sbc_cover() {
                 }
                 // m2 power button opening
                 if(sbc_model == "m2") {
-                    translate([79,34.5,height-floorthick-1]) color(b_color) slab_r([12,8,3], [2,2,2,2]);
+                    translate([79,33.75,height-floorthick-1]) color(b_color) slab_r([12,8,3], [2,2,2,2]);
                 }
                 // m2 fpc opening
                 if(sbc_model == "m2") {
@@ -730,11 +732,11 @@ module sbc_cover() {
             }
             // m2 power button
             if(sbc_model == "m2") {
-                translate([88,38.5,height-floorthick]) color(b_color) button("cutout", [12,8,1.5], [2,2,2,2], 2);
+                translate([88,37.75,height-floorthick]) color(b_color) button("cutout", [12,8,1.5], [2,2,2,2], 2);
             }
         }
         // sbc openings
-        translate([93.5,69+cover_offset,floorthick]) color(b_color) rotate([0,0,180]) sbc(sbc_model, cooling, fan_size, gpio_opening, "open", true);
+        translate([93.5,69+cover_offset,floorthick+.5]) color(b_color) rotate([0,0,180]) sbc(sbc_model, cooling, fan_size, gpio_opening, "open", true);
     }
 }
 
