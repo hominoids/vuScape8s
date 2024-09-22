@@ -15,8 +15,11 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
     Code released under GPLv3: http://www.gnu.org/licenses/gpl.html
 
-    20231204 Version 1.0    vuScape8s, Odroid-M1s and M1s-UPS integrated Case initial release.
-    202409xx Version 2.0    Added Odroid-M2
+    20231204 Version 1.0    vuScape8s, Odroid-M1s and M1s-UPS integrated case initial release.
+    20240921 Version 2.0    Added Odroid-M2, upgraded to released SBC Model Framework,
+                            for both M2 and M1s variations added more cooling options, 
+                            increased venting for NVME, support for all landscape
+                            and portrait orientations.
     
     vuscape8s_assembled()
     case_front()
@@ -46,6 +49,7 @@ move_ups_cover = 0; // [-1:200]
 /* [Adjustments] */
 sbc_model = "m2"; // ["m1s","m2"]
 orientation = "landscape"; // [landscape, portrait]
+flip_view = true;
 view_angle = 15; // [10:1:23]
 view_height = 24; // [10:.5:40]
 view_size = [172.5,107.5,.125]; // [1:.125:175]
@@ -56,7 +60,6 @@ insert_dia = 4.2; // [2:.1:5]
 
 /* [Options] */
 brackets = true;
-flip_view = true;
 backframe = true;
 gpio_opening = "default"; // [default,none,open,block,knockout,vent]
 
@@ -121,13 +124,13 @@ cover_offset = sbc_model == "m2" ? 25 : 0;
 // model view
 if (view == "model" && orientation == "landscape" && flip_view == false) {
     // landscape
-    translate([(width/2),-40,view_height-2+(view_angle-15)]) rotate([90+view_angle,0,180]) vuscape8s_assembled();
+    translate([(width/2),-40,view_height-2+(view_angle-15)]) rotate([90+view_angle,0,180]) 
+        vuscape8s_assembled();
 }
 if (view == "model" && orientation == "landscape" && flip_view == true) {
     // landscape
     translate([-(width/2),0,view_height-8+depth+(view_angle-15)]) rotate([90-view_angle,180,180]) 
         vuscape8s_assembled();
-//             translate([162,115.5,6+front_height]) color("blue") rotate([0,0,180]) sbc(sbc_model, cooling, fan_size, gpio_opening, "open", true);
 }
 if (view == "model" && orientation == "portrait") {
     translate([-(depth/2),-40,view_height-2+(view_angle-15)]) rotate([0,270-view_angle,270]) {  // portrait
@@ -141,7 +144,7 @@ if (view == "model" && orientation == "portrait") {
             translate([gap+wallthick+lcd_size[0],gap+wallthick+10,2.5+frontthick]) rotate([0,180,0]) hk_vu8s();
         }
         if(sbc_on == true) {
-            translate([162,115.5,6+front_height]) rotate([0,0,180]) sbc(sbc_model);
+            translate([162,115.5,5.5+front_height]) rotate([0,0,180]) sbc(sbc_model);
         }
         if((move_sbc_cover >= 0 && prototype_m1s_on == false) || (move_sbc_cover >= 0 && sbc_model == "m2")) {
             translate([gap+wallthick+66,gap+wallthick+44-cover_offset,front_height+4+move_sbc_cover]) 
@@ -252,7 +255,7 @@ module vuscape8s_assembled() {
          translate([162,115.5,6+front_height]) rotate([0,0,180]) sbc(sbc_model);
         }
         if(move_sbc_cover >= 0 && prototype_m1s_on == false) {
-         translate([wallthick+64.5+sbc_cover_gap,wallthick+42.5-cover_offset+sbc_cover_gap,front_height+4+move_sbc_cover]) sbc_cover();
+         translate([wallthick+65+sbc_cover_gap,wallthick+43-cover_offset+sbc_cover_gap,front_height+4+move_sbc_cover]) sbc_cover();
         }
         if(ups_on == true && sbc_model == "m1s") {
             if(ups_location == "side") {
@@ -707,7 +710,7 @@ module sbc_cover() {
 
                 // m1s uart & fpc opening
                 if(sbc_model == "m1s") {
-                    translate([-4,37,-1]) color(b_color) cube([7,17,4]);
+                    translate([-4,36.5,-1]) color(b_color) cube([7,17,4.5]);
                 }
                 // m2 power button opening
                 if(sbc_model == "m2") {
@@ -715,7 +718,7 @@ module sbc_cover() {
                 }
                 // m2 fpc opening
                 if(sbc_model == "m2") {
-                    translate([-3,61,height-floorthick-13]) rotate([0,90,0]) 
+                    translate([-3,60.5,height-floorthick-13]) rotate([0,90,0]) 
                         color(b_color) slab_r([8,19,6], [2,2,2,2]);
                 }
             }
@@ -736,7 +739,7 @@ module sbc_cover() {
             }
         }
         // sbc openings
-        translate([93.5,69+cover_offset,floorthick+.5]) color(b_color) rotate([0,0,180]) sbc(sbc_model, cooling, fan_size, gpio_opening, "open", true);
+        translate([93,68.5+cover_offset,floorthick+.25]) color(b_color) rotate([0,0,180]) sbc(sbc_model, cooling, fan_size, gpio_opening, "open", true);
     }
 }
 

@@ -657,7 +657,7 @@ module hdmi_open(hdmi_style,mlen) {
                 translate([0.5, -5.2, .5]) rotate ([-90, 0, 0]) cylinder(d=3, h=13.5, $fn=30);
                 translate([16, -5.2, .5]) rotate ([-90, 0, 0]) cylinder(d=3, h=13.5, $fn=30);
             }
-            translate([2, -5, .25]) cube([12.5, mlen, .75]);
+            translate([2, -5, .251]) cube([12.5, mlen, .75]);
         }
     }
     if(hdmi_style == "hdmi_micro") {
