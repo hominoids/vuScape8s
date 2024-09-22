@@ -204,7 +204,9 @@ if (view == "platter") {
     translate([width-2,0,back_height-.5]) rotate([0,180,0]) case_back();
     translate([0,depth+10,0]) case_front();
     translate([width+120,170,13]) rotate([0,180,0]) sbc_cover();
-    translate([width+140,270,23]) rotate([0,180,0]) ups_cover();
+    if(sbc_model == "m1s") {
+        translate([width+140,270,23]) rotate([0,180,0]) ups_cover();
+    }
     translate([width+10,0,0]) back_frame();
     translate([-150,35,12]) rotate([0,270,0]) bracket("left");
     translate([-130,30,0]) rotate([0,90,0]) bracket("right");
@@ -725,11 +727,11 @@ module sbc_cover() {
             if(cooling == "default" || cooling == "fan_open" || cooling == "fan_1" || cooling == "fan_2" ||cooling == "fan_hex") {
                 fansize = fan_size == 0 ? 40 : fan_size;
                 if(sbc_model == "m2") {
-                    translate([17-(fansize-40)/2,33-(fansize-40)/2,15.5]) color(b_color) 
+                    translate([17-(fansize-40)/2,33-(fansize-40)/2,18.5]) color(b_color) 
                         slab([fansize+2,fansize,floorthick],2);
                 }
                 if(sbc_model == "m1s") {
-                    translate([32-(fansize-40)/2,15.5-(fansize-40)/2,13.5]) color(b_color) 
+                    translate([32-(fansize-40)/2,15.5-(fansize-40)/2,16.5]) color(b_color) 
                         slab([fansize+2,fansize,floorthick],2);
                 }
             }
